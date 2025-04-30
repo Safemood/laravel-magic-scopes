@@ -16,6 +16,7 @@ class ForeignKeyFieldScopeResolver implements ScopeResolverContract
     public function apply(Builder $query, string $method, array $parameters, $model): Builder
     {
         $field = Str::snake(substr($method, 0, -2));
+
         return $query->whereHas($field, function ($query) use ($parameters) {
             $query->where('id', $parameters[0]);
         });

@@ -1,10 +1,10 @@
 <?php
- 
+
 namespace Safemood\MagicScopes\Resolvers;
 
 use Illuminate\Database\Eloquent\Builder;
-use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 use Illuminate\Support\Str;
+use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 
 class EnumFieldScopeResolver implements ScopeResolverContract
 {
@@ -18,11 +18,10 @@ class EnumFieldScopeResolver implements ScopeResolverContract
     {
         $field = Str::snake(substr($method, 2));
 
-        if (!empty($parameters)) {
+        if (! empty($parameters)) {
             return $query->where($field, $parameters[0]);
         }
 
-         return $query;
+        return $query;
     }
 }
-

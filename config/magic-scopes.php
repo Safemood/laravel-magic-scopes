@@ -22,6 +22,5 @@ return [
         \Safemood\MagicScopes\Resolvers\ArrayFieldScopeResolver::class,
     ],
 
-
     'scope_prefix' => null,
 ];

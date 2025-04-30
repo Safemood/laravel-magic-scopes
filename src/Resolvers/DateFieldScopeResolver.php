@@ -3,8 +3,8 @@
 namespace Safemood\MagicScopes\Resolvers;
 
 use Illuminate\Database\Eloquent\Builder;
-use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 use Illuminate\Support\Str;
+use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 
 class DateFieldScopeResolver implements ScopeResolverContract
 {
@@ -16,6 +16,7 @@ class DateFieldScopeResolver implements ScopeResolverContract
     public function apply(Builder $query, string $method, array $parameters, $model): Builder
     {
         $field = Str::snake(substr($method, 0, -4));
+
         return $query->whereDate($field, $parameters[0]);
     }
 }

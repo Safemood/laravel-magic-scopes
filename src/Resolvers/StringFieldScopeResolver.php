@@ -3,12 +3,13 @@
 namespace Safemood\MagicScopes\Resolvers;
 
 use Illuminate\Database\Eloquent\Builder;
-use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 use Illuminate\Support\Str;
+use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 
 class StringFieldScopeResolver implements ScopeResolverContract
 {
     protected string $positivePrefix = 'has';
+
     protected string $negativePrefix = 'hasNot';
 
     public function matches(string $method, $model): bool

@@ -6,13 +6,12 @@ use Safemood\MagicScopes\Facades\MagicScope;
 
 trait HasMagicScopes
 {
-
     /**
      * Handle dynamic method calls (instance methods).
      */
     public function __call($method, $parameters)
     {
- 
+
         if (MagicScope::isResolvable($method, $this)) {
             return MagicScope::resolve($this->newQuery(), $method, $parameters, $this);
         }
@@ -25,7 +24,7 @@ trait HasMagicScopes
      */
     public static function __callStatic($method, $parameters)
     {
-  
+
         $instance = new static;
 
         if (MagicScope::isResolvable($method, $instance)) {
