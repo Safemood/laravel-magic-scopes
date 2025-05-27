@@ -10,7 +10,7 @@ class BooleanFieldScopeResolver implements ScopeResolverContract
 {
     public function matches(string $method, $model): bool
     {
-      
+
         return collect($model->getFillable())->contains(function ($field) use ($method) {
             return $this->getPositiveScopeName($field) === $method
                 || $this->getNegativeScopeName($field) === $method;
@@ -19,18 +19,17 @@ class BooleanFieldScopeResolver implements ScopeResolverContract
 
     public function apply(Builder $query, string $method, array $parameters, $model): Builder
     {
-    
+
         $field = $this->resolveBooleanField($method, $model);
 
-       
-        $value = Str::startsWith($method, 'not') ? false : true;
+        $value = Str::startsWith($method, ['not', 'hasNot']) ? false : true;
 
         return $query->where($field, $value);
     }
 
     protected function resolveBooleanField(string $method, $model): string
     {
-         return collect($model->getFillable())->first(function ($field) use ($method) {
+        return collect($model->getFillable())->first(function ($field) use ($method) {
             return $this->getPositiveScopeName($field) === $method
                 || $this->getNegativeScopeName($field) === $method;
         });
@@ -54,10 +53,9 @@ class BooleanFieldScopeResolver implements ScopeResolverContract
         $positive = $this->getPositiveScopeName($field);
 
         if (Str::startsWith($field, 'has_')) {
-            return $positive ? 'hasNot' . Str::ucfirst(Str::camel(substr($field, 4))) : '';
+            return $positive ? 'hasNot'.Str::ucfirst(Str::camel(substr($field, 4))) : '';
         }
 
-     
-        return $positive ? 'not' . ucfirst($positive) : '';
+        return $positive ? 'not'.ucfirst($positive) : '';
     }
 }
