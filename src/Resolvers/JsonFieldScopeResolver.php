@@ -3,19 +3,32 @@
 namespace Safemood\MagicScopes\Resolvers;
 
 use Illuminate\Database\Eloquent\Builder;
-use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 use Illuminate\Support\Str;
+use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 
 class JsonFieldScopeResolver implements ScopeResolverContract
 {
     public function matches(string $method, $model): bool
     {
-        return Str::endsWith($method, 'Json');
+        return Str::endsWith($method, ['Contains', 'DoesntContain']);
     }
 
     public function apply(Builder $query, string $method, array $parameters, $model): Builder
     {
-        $field = Str::snake(substr($method, 0, -4));
-        return $query->whereJsonContains($field, $parameters[0]);
+        $value = $parameters[1] ?? null;
+        $jsonKey = $parameters[0] ?? null;
+
+        if (! $jsonKey || is_null($value)) {
+            throw new \InvalidArgumentException('Both JSON key and value must be provided.');
+        }
+
+        $mode = Str::endsWith($method, 'DoesntContain') ? 'whereJsonDoesntContain' : 'whereJsonContains';
+        $column = Str::beforeLast($method, Str::endsWith($method, 'DoesntContain') ? 'DoesntContain' : 'Contains');
+
+        $column = Str::snake($column);
+
+        $path = "$column->$jsonKey";
+
+        return $query->$mode($path, $value);
     }
 }
