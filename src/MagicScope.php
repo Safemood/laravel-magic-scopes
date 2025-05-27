@@ -17,11 +17,6 @@ class MagicScope
     protected $resolvers = [];
 
     /**
-     * Prefix for scope methods.
-     */
-    protected ?string $prefix;
-
-    /**
      * Register default scope resolvers.
      */
     public function __construct()
