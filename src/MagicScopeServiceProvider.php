@@ -2,9 +2,9 @@
 
 namespace Safemood\MagicScopes;
 
+use Safemood\MagicScopes\Commands\MagicScopeCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Safemood\MagicScopes\Commands\MagicScopeCommand;
 
 class MagicScopeServiceProvider extends PackageServiceProvider
 {
@@ -23,11 +23,9 @@ class MagicScopeServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
- 
-       
 
         $this->app->singleton(MagicScope::class, function () {
-            return new MagicScope();
+            return new MagicScope;
         });
     }
 }
