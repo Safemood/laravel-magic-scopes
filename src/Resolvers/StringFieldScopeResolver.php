@@ -3,17 +3,18 @@
 namespace Safemood\MagicScopes\Resolvers;
 
 use Illuminate\Database\Eloquent\Builder;
-use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 use Illuminate\Support\Str;
+use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 
 class StringFieldScopeResolver implements ScopeResolverContract
 {
     protected string $positivePrefix = 'has';
+
     protected string $negativePrefix = 'hasNot';
 
     public function matches(string $method, $model): bool
     {
-        return $this->isPositiveCondition($method) || $this->isNegativeCondition($method);
+        return (bool) preg_match('/^(has|hasNot).*(Like|StartWith|EndWith)$/', $method);
     }
 
     public function apply(Builder $query, string $method, array $parameters, $model): Builder
