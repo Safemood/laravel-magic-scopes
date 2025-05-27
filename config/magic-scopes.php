@@ -19,9 +19,5 @@ return [
         \Safemood\MagicScopes\Resolvers\JsonFieldScopeResolver::class,
         \Safemood\MagicScopes\Resolvers\NumberFieldScopeResolver::class,
         \Safemood\MagicScopes\Resolvers\StringFieldScopeResolver::class,
-        \Safemood\MagicScopes\Resolvers\ArrayFieldScopeResolver::class,
     ],
-
-
-    'scope_prefix' => null,
 ];
