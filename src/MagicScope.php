@@ -18,8 +18,6 @@ class MagicScope
 
     /**
      * Prefix for scope methods.
-     *
-     * @var string|null
      */
     protected ?string $prefix;
 
@@ -28,15 +26,11 @@ class MagicScope
      */
     public function __construct()
     {
-        $this->prefix = Config::get('magic-scopes.scope_prefix'); // Default prefix from config
         $this->loadResolvers();
     }
 
     /**
      * Add a custom scope resolver.
-     *
-     * @param ScopeResolverContract $resolver
-     * @return void
      */
     public function addResolver(ScopeResolverContract $resolver): void
     {
@@ -45,13 +39,11 @@ class MagicScope
 
     /**
      * Load scope resolvers from configuration.
-     *
-     * @return void
      */
     protected function loadResolvers(): void
     {
-        $resolverClasses = Config::get('magic-scopes.resolvers',[]);
- 
+        $resolverClasses = Config::get('magic-scopes.resolvers', []);
+
         foreach ($resolverClasses as $resolverClass) {
             $this->resolvers[] = App::make($resolverClass);
         }
@@ -60,54 +52,44 @@ class MagicScope
     /**
      * Handle the dynamic scope call.
      *
-     * @param Builder $query
-     * @param string $method
-     * @param array $parameters
-     * @param mixed $model
-     * @return Builder
+     * @param  mixed  $model
      */
     public function resolve(Builder $query, string $method, array $parameters, $model): Builder
     {
-        $prefixedMethod = $this->applyPrefix($method);
 
-        foreach ($this->resolvers as $resolver) {
-            if ($resolver->matches($prefixedMethod, $model)) {
-                return $resolver->apply($query, $prefixedMethod, $parameters, $model);
-            }
+        $matchedResolvers = array_filter($this->resolvers, fn ($resolver) => $resolver->matches($method, $model));
+
+        $count = count($matchedResolvers);
+
+        if ($count === 0) {
+            return $query;
         }
 
-        return $query;
+        if ($count > 1) {
+            $resolverClasses = array_map(fn ($resolver) => get_class($resolver), $matchedResolvers);
+            $resolverList = implode(', ', $resolverClasses);
+            throw new \RuntimeException("Multiple scope resolvers matched method [$method]: [$resolverList]. Ambiguous resolution.");
+        }
+
+        $resolver = array_values($matchedResolvers)[0];
+
+        return $resolver->apply($query, $method, $parameters, $model);
     }
 
     /**
      * Check if a method is resolvable.
      *
-     * @param string $method
-     * @param mixed $model
-     * @return bool
+     * @param  mixed  $model
      */
     public function isResolvable(string $method, $model): bool
     {
-        $prefixedMethod = $this->applyPrefix($method);
-       
+
         foreach ($this->resolvers as $resolver) {
-            
-            if ($resolver->matches($prefixedMethod, $model)) {
+            if ($resolver->matches($method, $model)) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    /**
-     * Apply the configured prefix to a method name if it's set.
-     *
-     * @param string $method
-     * @return string
-     */
-    protected function applyPrefix(string $method): string
-    {
-        return $this->prefix ? $this->prefix . ucfirst($method) : $method;
     }
 }
