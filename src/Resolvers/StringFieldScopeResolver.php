@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Safemood\MagicScopes\Resolvers;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 
@@ -12,12 +15,12 @@ class StringFieldScopeResolver implements ScopeResolverContract
 
     protected string $negativePrefix = 'hasNot';
 
-    public function matches(string $method, $model): bool
+    public function matches(string $method, Model $model): bool
     {
         return (bool) preg_match('/^(has|hasNot).*(Like|StartWith|EndWith)$/', $method);
     }
 
-    public function apply(Builder $query, string $method, array $parameters, $model): Builder
+    public function apply(Builder $query, string $method, array $parameters, Model $model): Builder
     {
         $field = $this->extractFieldName($method);
         $value = $parameters[0];

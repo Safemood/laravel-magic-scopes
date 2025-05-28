@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Safemood\MagicScopes\Resolvers;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 
 class BooleanFieldScopeResolver implements ScopeResolverContract
 {
-    public function matches(string $method, $model): bool
+    public function matches(string $method, Model $model): bool
     {
 
         return collect($model->getFillable())->contains(function ($field) use ($method) {
@@ -17,7 +20,7 @@ class BooleanFieldScopeResolver implements ScopeResolverContract
         });
     }
 
-    public function apply(Builder $query, string $method, array $parameters, $model): Builder
+    public function apply(Builder $query, string $method, array $parameters, Model $model): Builder
     {
 
         $field = $this->resolveBooleanField($method, $model);
@@ -27,7 +30,7 @@ class BooleanFieldScopeResolver implements ScopeResolverContract
         return $query->where($field, $value);
     }
 
-    protected function resolveBooleanField(string $method, $model): string
+    protected function resolveBooleanField(string $method, Model $model): string
     {
         return collect($model->getFillable())->first(function ($field) use ($method) {
             return $this->getPositiveScopeName($field) === $method

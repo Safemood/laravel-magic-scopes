@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Safemood\MagicScopes\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;

@@ -1,18 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Safemood\MagicScopes\Resolvers;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 
 class ForeignKeyFieldScopeResolver implements ScopeResolverContract
 {
-    public function matches(string $method, $model): bool
+    public function matches(string $method, Model $model): bool
     {
-        return preg_match('/^(with|for)([A-Z][a-zA-Z0-9]+)$/', $method);
+        return (bool) preg_match('/^(with|for)([A-Z][a-zA-Z0-9]+)$/', $method);
     }
 
-    public function apply(Builder $query, string $method, array $parameters, $model): Builder
+    public function apply(Builder $query, string $method, array $parameters, Model $model): Builder
     {
         if (! preg_match('/^(with|for)([A-Z][a-zA-Z0-9]+)$/', $method, $matches)) {
             return $query;
@@ -27,11 +31,9 @@ class ForeignKeyFieldScopeResolver implements ScopeResolverContract
             throw new \BadMethodCallException("Relation method '{$relation}' not defined on ".get_class($model));
         }
 
-        if ($prefix === 'with') {
-            return $this->applyWith($query, $relation, $value, $model);
-        }
-
-        return $this->applyFor($query, $relation, $value, $model);
+        return $prefix === 'with'
+            ? $this->applyWith($query, $relation, $value, $model)
+            : $this->applyFor($query, $relation, $value, $model);
     }
 
     protected function applyWith(Builder $query, string $relation, $value, $model): Builder
@@ -40,20 +42,19 @@ class ForeignKeyFieldScopeResolver implements ScopeResolverContract
             return $query->with($relation);
         }
 
-        $related = $model->{$relation}()->getRelated();
-        $relatedKey = $related->getKeyName(); // typically 'id'
+        $relationInstance = $model->{$relation}();
 
-        return $query->whereHas($relation, function (Builder $q) use ($relatedKey, $value) {
+        return $query->with([$relation => function ($relationQuery) use ($relationInstance, $value) {
+            $builder = $relationQuery instanceof Relation
+                ? $relationQuery->getQuery()
+                : $relationQuery;
+
+            $ownerKey = $this->resolveOwnerKey($relationInstance);
+
             if (is_array($value)) {
-                $q->whereIn($relatedKey, $value);
+                $builder->whereIn($ownerKey, $value);
             } else {
-                $q->where($relatedKey, $value);
-            }
-        })->with([$relation => function (Builder $q) use ($relatedKey, $value) {
-            if (is_array($value)) {
-                $q->whereIn($relatedKey, $value);
-            } else {
-                $q->where($relatedKey, $value);
+                $builder->where($ownerKey, $value);
             }
         }]);
     }
@@ -66,21 +67,26 @@ class ForeignKeyFieldScopeResolver implements ScopeResolverContract
 
         $relatedKey = $this->getRelatedForeignKeyName($model, $relation);
 
-        if (is_array($value)) {
-            return $query->whereIn($relatedKey, $value);
-        }
-
-        return $query->where($relatedKey, $value);
+        return is_array($value)
+            ? $query->whereIn($relatedKey, $value)
+            : $query->where($relatedKey, $value);
     }
 
-    protected function getRelatedForeignKeyName($model, string $relation)
+    protected function getRelatedForeignKeyName($model, string $relation): string
     {
-        if (method_exists($model, $relation)) {
-            $relationObj = $model->{$relation}();
+        return $model->{$relation}()->getForeignKeyName();
+    }
 
-            return $relationObj->getForeignKeyName();
+    protected function resolveOwnerKey(Relation $relation): string
+    {
+        if (method_exists($relation, 'getOwnerKeyName')) {
+            return $relation->getOwnerKeyName();
         }
 
-        return $relation.'_id';
+        if (method_exists($relation, 'getLocalKeyName')) {
+            return $relation->getLocalKeyName();
+        }
+
+        return 'id';
     }
 }

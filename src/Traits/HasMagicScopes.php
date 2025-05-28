@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Safemood\MagicScopes\Traits;
 
 use Safemood\MagicScopes\Facades\MagicScope;

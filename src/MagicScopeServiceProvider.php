@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Safemood\MagicScopes;
 
-use Safemood\MagicScopes\Commands\MagicScopeCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -17,8 +18,7 @@ class MagicScopeServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-magic-scopes')
-            ->hasConfigFile()
-            ->hasCommand(MagicScopeCommand::class);
+            ->hasConfigFile();
     }
 
     public function packageRegistered(): void

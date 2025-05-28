@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Safemood\MagicScopes;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Safemood\MagicScopes\Contracts\ScopeResolverContract;
@@ -46,12 +49,9 @@ class MagicScope
 
     /**
      * Handle the dynamic scope call.
-     *
-     * @param  mixed  $model
      */
-    public function resolve(Builder $query, string $method, array $parameters, $model): Builder
+    public function resolve(Builder $query, string $method, array $parameters, Model $model): Builder
     {
-
         $matchedResolvers = array_filter($this->resolvers, fn ($resolver) => $resolver->matches($method, $model));
 
         $count = count($matchedResolvers);
@@ -73,12 +73,9 @@ class MagicScope
 
     /**
      * Check if a method is resolvable.
-     *
-     * @param  mixed  $model
      */
-    public function isResolvable(string $method, $model): bool
+    public function isResolvable(string $method, Model $model): bool
     {
-
         foreach ($this->resolvers as $resolver) {
             if ($resolver->matches($method, $model)) {
                 return true;

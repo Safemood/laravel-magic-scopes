@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Safemood\MagicScopes\Resolvers;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Safemood\MagicScopes\Contracts\ScopeResolverContract;
 
@@ -15,7 +18,7 @@ class NumberFieldScopeResolver implements ScopeResolverContract
         'Between',
     ];
 
-    public function matches(string $method, $model): bool
+    public function matches(string $method, Model $model): bool
     {
         if (! Str::startsWith($method, 'where')) {
             return false;
@@ -25,7 +28,7 @@ class NumberFieldScopeResolver implements ScopeResolverContract
             ->contains(fn ($operator) => Str::endsWith($method, $operator));
     }
 
-    public function apply(Builder $query, string $method, array $parameters, $model): Builder
+    public function apply(Builder $query, string $method, array $parameters, Model $model): Builder
     {
         $methodWithoutWhere = Str::after($method, 'where');
 
