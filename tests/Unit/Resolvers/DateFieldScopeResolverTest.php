@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Mockery;
+
 use Safemood\MagicScopes\Resolvers\DateFieldScopeResolver;
 
 beforeEach(function () {
