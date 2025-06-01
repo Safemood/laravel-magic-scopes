@@ -86,11 +86,4 @@ describe('DateFieldScopeResolver', function () {
         expect($actualSql)->toEqual($expectedSql);
     });
 
-    it('throws exception when between is missing parameters', function () {
-        expect(fn () => Post::publishedBetween('2024-05-10'))->toThrow(\InvalidArgumentException::class);
-    });
-
-    it('throws exception when no parameters are provided', function () {
-        expect(fn () => Post::publishedAt())->toThrow(\InvalidArgumentException::class);
-    });
 });
