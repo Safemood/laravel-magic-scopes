@@ -40,13 +40,15 @@ class NumberFieldScopeResolver implements ScopeResolverContract
 
         $field = $this->extractField($methodWithoutWhere, $operator);
 
-        return match ($operator) {
+        match ($operator) {
             'Equals' => $query->where($field, '=', $parameters[0]),
             'GreaterThan' => $query->where($field, '>', $parameters[0]),
             'LessThan' => $query->where($field, '<', $parameters[0]),
             'Between' => $query->whereBetween($field, [$parameters[0], $parameters[1]]),
             default => $query,
         };
+
+        return $query;
     }
 
     protected function detectOperator(string $method): ?string

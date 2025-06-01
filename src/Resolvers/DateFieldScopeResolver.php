@@ -25,25 +25,14 @@ class DateFieldScopeResolver implements ScopeResolverContract
             $field .= '_at';
         }
 
-        if (empty($parameters)) {
-            throw new \InvalidArgumentException("DateFieldScopeResolver requires parameters for method [$method].");
-        }
-
-        return match ($suffix) {
+        match ($suffix) {
             'At' => $query->whereDate($field, $parameters[0]),
             'Before' => $query->whereDate($field, '<', $parameters[0]),
             'After' => $query->whereDate($field, '>', $parameters[0]),
-            'Between' => $this->applyBetween($query, $field, $parameters),
+            'Between' => $query->whereBetween($field, $parameters),
             default => throw new \InvalidArgumentException("Unknown date scope suffix [$suffix]."),
         };
-    }
 
-    protected function applyBetween(Builder $query, string $field, array $parameters): Builder
-    {
-        if (count($parameters) < 2) {
-            throw new \InvalidArgumentException("DateFieldScopeResolver 'Between' requires two date parameters.");
-        }
-
-        return $query->whereBetween($field, [$parameters[0], $parameters[1]]);
+        return $query;
     }
 }

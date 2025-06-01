@@ -27,7 +27,9 @@ class BooleanFieldScopeResolver implements ScopeResolverContract
 
         $value = Str::startsWith($method, ['not', 'hasNot']) ? false : true;
 
-        return $query->where($field, $value);
+        $query->where($field, $value);
+
+        return $query;
     }
 
     protected function resolveBooleanField(string $method, Model $model): string

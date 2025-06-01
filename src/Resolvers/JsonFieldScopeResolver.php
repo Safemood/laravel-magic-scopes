@@ -32,6 +32,8 @@ class JsonFieldScopeResolver implements ScopeResolverContract
 
         $path = "$column->$jsonKey";
 
-        return $query->$mode($path, $value);
+        $query->$mode($path, $value);
+
+        return $query;
     }
 }

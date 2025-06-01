@@ -44,7 +44,7 @@ class ForeignKeyFieldScopeResolver implements ScopeResolverContract
 
         $relationInstance = $model->{$relation}();
 
-        return $query->with([$relation => function ($relationQuery) use ($relationInstance, $value) {
+        $query->with([$relation => function ($relationQuery) use ($relationInstance, $value) {
             $builder = $relationQuery instanceof Relation
                 ? $relationQuery->getQuery()
                 : $relationQuery;
@@ -57,6 +57,8 @@ class ForeignKeyFieldScopeResolver implements ScopeResolverContract
                 $builder->where($ownerKey, $value);
             }
         }]);
+
+        return $query;
     }
 
     protected function applyFor(Builder $query, string $relation, $value, $model): Builder
@@ -67,9 +69,11 @@ class ForeignKeyFieldScopeResolver implements ScopeResolverContract
 
         $relatedKey = $this->getRelatedForeignKeyName($model, $relation);
 
-        return is_array($value)
+        is_array($value)
             ? $query->whereIn($relatedKey, $value)
             : $query->where($relatedKey, $value);
+
+        return $query;
     }
 
     protected function getRelatedForeignKeyName($model, string $relation): string
