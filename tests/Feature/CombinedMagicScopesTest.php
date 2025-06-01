@@ -88,7 +88,6 @@ describe('CombinedMagicScopesTest', function () {
         expect($actualSql)->toEqual($expectedSql);
     });
 
-    
     it('generates correct SQL for combined magic scopes and recent scope', function () {
         $expectedSql = Post::query()
             ->where('is_published', true)

@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-
 use Safemood\MagicScopes\Resolvers\DateFieldScopeResolver;
 
 beforeEach(function () {
-    $this->resolver = new DateFieldScopeResolver();
+    $this->resolver = new DateFieldScopeResolver;
 
     $this->model = Mockery::mock(Model::class);
 
@@ -39,7 +40,7 @@ it('apply throws exception if parameters empty', function () {
     $query = Mockery::mock(Builder::class);
 
     $this->expectException(\InvalidArgumentException::class);
-    $this->expectExceptionMessage("DateFieldScopeResolver requires parameters for method [createdAt].");
+    $this->expectExceptionMessage('DateFieldScopeResolver requires parameters for method [createdAt].');
 
     $this->resolver->apply($query, 'createdAt', [], $this->model);
 });
@@ -48,11 +49,10 @@ it('apply throws exception for unknown suffix', function () {
     $query = Mockery::mock(Builder::class);
 
     $this->expectException(\InvalidArgumentException::class);
-    $this->expectExceptionMessage("Unknown date scope suffix [].");
+    $this->expectExceptionMessage('Unknown date scope suffix [].');
 
     $this->resolver->apply($query, 'createdAtUnknown', ['2025-05-28'], $this->model);
 });
-
 
 it('apply handles At suffix correctly', function () {
     $query = Mockery::mock(Builder::class);

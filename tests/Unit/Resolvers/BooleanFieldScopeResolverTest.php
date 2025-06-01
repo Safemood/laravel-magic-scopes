@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
- 
 use Safemood\MagicScopes\Resolvers\BooleanFieldScopeResolver;
 
 beforeEach(function () {
-    $this->resolver = new BooleanFieldScopeResolver();
+    $this->resolver = new BooleanFieldScopeResolver;
 
     $this->model = Mockery::mock(Model::class);
     $this->model->shouldReceive('getFillable')
@@ -17,7 +18,6 @@ afterEach(function () {
     Mockery::close();
 });
 
- 
 it('matches positive boolean scopes correctly', function () {
     expect($this->resolver->matches('active', $this->model))->toBeTrue();
     expect($this->resolver->matches('hasAccess', $this->model))->toBeTrue();
@@ -42,6 +42,7 @@ it('applies positive scope with true value', function () {
     $query->shouldReceive('getQuery')->andReturn($innerQuery);
     $query->shouldReceive('where')->andReturnUsing(function ($field, $value) use ($innerQuery, $query) {
         $innerQuery->wheres[] = ['column' => $field, 'value' => $value];
+
         return $query;
     });
 
@@ -60,6 +61,7 @@ it('applies negative scope with false value', function () {
     $query->shouldReceive('getQuery')->andReturn($innerQuery);
     $query->shouldReceive('where')->andReturnUsing(function ($field, $value) use ($innerQuery, $query) {
         $innerQuery->wheres[] = ['column' => $field, 'value' => $value];
+
         return $query;
     });
 
@@ -78,6 +80,7 @@ it('applies hasNot scope with false value', function () {
     $query->shouldReceive('getQuery')->andReturn($innerQuery);
     $query->shouldReceive('where')->andReturnUsing(function ($field, $value) use ($innerQuery, $query) {
         $innerQuery->wheres[] = ['column' => $field, 'value' => $value];
+
         return $query;
     });
 

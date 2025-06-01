@@ -5,9 +5,9 @@ declare(strict_types=1);
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
+use Safemood\MagicScopes\Facades\MagicScope as MagicScopeFacade;
 use Safemood\MagicScopes\MagicScope;
 use Safemood\MagicScopes\Tests\Support\FakeResolvers\FakeResolver;
-use Safemood\MagicScopes\Facades\MagicScope as MagicScopeFacade;
 
 beforeEach(function () {
     Config::set('magic-scopes.resolvers', []);
@@ -96,19 +96,19 @@ it('throws exception if multiple resolvers match (ambiguous resolution)', functi
 });
 
 it('can add resolver and resolve scopes via facade', function () {
-     MagicScopeFacade::addResolver(new FakeResolver());
+    MagicScopeFacade::addResolver(new FakeResolver);
 
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         protected $table = 'users';
     };
 
     $query = new Builder($model->newQuery()->getQuery());
 
-     $result = MagicScopeFacade::resolve($query, 'testScope', [], $model);
+    $result = MagicScopeFacade::resolve($query, 'testScope', [], $model);
 
-     expect($result)->toBe($query);
+    expect($result)->toBe($query);
 });
-
 
 function getProtected(object $object, string $property)
 {
