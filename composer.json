@@ -1,6 +1,6 @@
 {
     "name": "safemood/laravel-magic-scopes",
-    "description": "A Laravel package that automatically generates dynamic query scopes from field names and types",
+    "description": "Laravel Magic Scopes auto-generates obvious Laravel query scopes for your models — no code needed, just magic 🔮 with sugar syntax 🍭.",
     "keywords": [
         "Khalil Bouzidi",
         "laravel",
