@@ -80,4 +80,3 @@ it('apply handles Between suffix correctly', function () {
 
     expect($result)->toBe($query);
 });
- 

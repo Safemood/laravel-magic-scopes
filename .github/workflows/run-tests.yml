@@ -17,6 +17,8 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 5
+    env:
+      CI: true
     strategy:
       fail-fast: true
       matrix:

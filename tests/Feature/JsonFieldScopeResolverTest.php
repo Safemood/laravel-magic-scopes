@@ -65,4 +65,4 @@ describe('JsonFieldScopeResolver', function () {
 
         expect($actualSql)->toEqual($expectedSql);
     });
-});
+})->skip((bool) getenv('CI') === true, 'Skipped in CI: requires JSON support not available in SQLite.');
