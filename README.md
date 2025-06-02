@@ -47,7 +47,7 @@ composer require safemood/laravel-magic-scopes
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-magic-scopes-config"
+php artisan vendor:publish --tag="magic-scopes-config"
 ```
 
 This is the contents of the published config file:
