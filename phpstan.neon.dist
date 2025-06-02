@@ -12,4 +12,4 @@ parameters:
     checkModelProperties: true
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
-      - '#Trait Safemood\\\\MagicScopes\\\\Traits\\\\HasMagicScopes is used zero times and is not analysed#'
+        - '#Trait .* is used zero times and is not analysed#'
