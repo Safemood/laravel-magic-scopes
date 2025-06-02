@@ -1,6 +1,6 @@
 {
     "name": "safemood/laravel-magic-scopes",
-    "description": "Laravel Magic Scopes auto-generates obvious Laravel query scopes for your models — no code needed, just magic 🔮 with sugar syntax 🍭.",
+    "description": "Laravel Magic Scopes auto-generates obvious Laravel query scopes for your models — no code needed, just magic 🔮",
     "keywords": [
         "Khalil Bouzidi",
         "laravel",
