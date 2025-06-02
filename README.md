@@ -18,6 +18,7 @@ Laravel Magic Scopes auto-generates obvious Laravel query scopes for your models
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
+    - [Scopes Chaining](#scopes-chaining)
     - [Boolean Field Scopes](#boolean-field-scopes)
     - [Enum Field Scopes](#enum-field-scopes)
     - [Foreign Key Scopes](#foreign-key-scopes)
@@ -85,7 +86,16 @@ class Post extends Model
 }
 
 ```
+---
+### Scopes Chaining
 
+```php
+$posts = Post::where('views', '>', 216) // query
+    ->notPublished()                    // magic scope
+    ->recent()                         // real scope
+    ->createdAfter('2025-05-01')      // magic scope
+    ->get();
+```
 ---
 
 ### Boolean Field Scopes
