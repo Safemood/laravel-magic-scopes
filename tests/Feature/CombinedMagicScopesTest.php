@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Carbon;
 use Workbench\App\Models\Post;
 
 describe('CombinedMagicScopesTest', function () {
@@ -89,21 +90,23 @@ describe('CombinedMagicScopesTest', function () {
     });
 
     it('generates correct SQL for combined magic scopes and recent scope', function () {
+        Carbon::setTestNow('2025-06-02 12:00:00'); 
+    
         $expectedSql = Post::query()
             ->where('is_published', true)
             ->where('views', '>', 100)
             ->where('published_at', '>=', now()->subDays(7))
             ->whereDate('created_at', '>', '2024-01-01')
             ->toRawSql();
-
+    
         $actualSql = Post::query()
             ->published()
             ->where('views', '>', 100)
             ->recent()
             ->createdAfter('2024-01-01')
             ->toRawSql();
-
+    
         expect($actualSql)->toEqual($expectedSql);
     });
-
+    
 });
