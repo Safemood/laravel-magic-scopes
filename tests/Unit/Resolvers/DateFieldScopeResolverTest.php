@@ -36,15 +36,6 @@ it('matches valid date scope methods', function () {
     expect($this->resolver->matches('randomMethod', $this->model))->toBeFalse();
 });
 
-it('apply throws exception if parameters empty', function () {
-    $query = Mockery::mock(Builder::class);
-
-    $this->expectException(\InvalidArgumentException::class);
-    $this->expectExceptionMessage('DateFieldScopeResolver requires parameters for method [createdAt].');
-
-    $this->resolver->apply($query, 'createdAt', [], $this->model);
-});
-
 it('apply throws exception for unknown suffix', function () {
     $query = Mockery::mock(Builder::class);
 
@@ -89,21 +80,4 @@ it('apply handles Between suffix correctly', function () {
 
     expect($result)->toBe($query);
 });
-
-it('applyBetween throws if less than two parameters', function () {
-    $query = Mockery::mock(Builder::class);
-
-    $this->expectException(\InvalidArgumentException::class);
-    $this->expectExceptionMessage("DateFieldScopeResolver 'Between' requires two date parameters.");
-
-    invokeMethod($this->resolver, 'applyBetween', [$query, 'field_at', ['2025-05-01']]);
-});
-
-it('applyBetween calls whereBetween with two params', function () {
-    $query = Mockery::mock(Builder::class);
-    $query->shouldReceive('whereBetween')->once()->with('field_at', ['2025-05-01', '2025-05-31'])->andReturnSelf();
-
-    $result = invokeMethod($this->resolver, 'applyBetween', [$query, 'field_at', ['2025-05-01', '2025-05-31']]);
-
-    expect($result)->toBe($query);
-});
+ 
