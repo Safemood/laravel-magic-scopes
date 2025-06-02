@@ -18,7 +18,7 @@ Laravel Magic Scopes auto-generates obvious Laravel query scopes for your models
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
-    - [Scopes Chaining](#scopes-chaining)
+    - [What It can do](#what-it-can-do)
     - [Boolean Field Scopes](#boolean-field-scopes)
     - [Enum Field Scopes](#enum-field-scopes)
     - [Foreign Key Scopes](#foreign-key-scopes)
@@ -87,7 +87,7 @@ class Post extends Model
 
 ```
 ---
-### Scopes Chaining
+### What It can do
 
 ```php
 $posts = Post::where('views', '>', 216) // query
