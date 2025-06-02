@@ -8,7 +8,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/safemood/laravel-magic-scopes/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/safemood/laravel-magic-scopes/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/safemood/laravel-magic-scopes.svg?style=flat-square)](https://packagist.org/packages/safemood/laravel-magic-scopes)
 
-Laravel Magic Scopes auto-generates obvious Laravel query scopes for your models — no code needed, just magic 🔮.
+Laravel Magic Scopes auto-generates  query scopes for your models — no code needed, just magic 🔮.
 
 ---
 
