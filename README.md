@@ -132,6 +132,9 @@ Post::withUser()->get();                 // with('user')
 Post::withUser([1, 2])->get();           // with(['user' => fn ($q) => $q->whereIn('id', [1, 2])])
 
 Post::withAuthor(10)->get();             // with(['author' => fn ($q) => $q->where('id', 10)])
+
+ NOTE: 
+ The relationships ('user', 'author') must be properly defined on the `Post` model 
 ```
 ---
 
