@@ -134,7 +134,7 @@ Post::withUser([1, 2])->get();           // with(['user' => fn ($q) => $q->where
 Post::withAuthor(10)->get();             // with(['author' => fn ($q) => $q->where('id', 10)])
 
  NOTE: 
- The relationships ('user', 'author') must be properly defined on the `Post` model 
+ The relationships ('user', 'author') must be properly defined on the `Post` model  (at least for now 😉)
 ```
 ---
 
