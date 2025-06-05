@@ -205,7 +205,9 @@ class CustomScopeResolver implements ScopeResolverContract
         $column = 'your_column_name'; // extract from method name
         $value = $parameters[0] ?? null; // get the value, depending on your logic
 
-        return $builder->where($column, $value); // Apply basic WHERE condition
+        $builder->where($column, $value); // Apply basic WHERE condition
+
+        return $query; // Always return the original query builder after applying conditions
     }
 }
 ```
